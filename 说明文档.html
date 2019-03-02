@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <script>
+
+
+
+//   1.根目录 myblog
+
+// 	npm init 生成 package.json
+
+// 	npm i express@4.14.0 --save
+
+// 	npm i -g supervisor	//自动重启程序
+
+// 	npm i ejs --save   //模板引擎
+
+// 2.express.Router管理路由
+
+// 3.ejs语法
+
+//   ejs 有 3 种常用标签
+
+//   <% code %>：运行 JavaScript 代码，不输出
+//   <%= code %>：显示转义后的 HTML内容
+//   <%- code %>：显示原始 HTML 内容
+
+//   列子：
+//     router.get('/:name', function (req, res) {
+//       res.render('users', {
+//         name: req.params.name
+//       })
+//     })
+//   res.render 第一个参数是模板的名字，这里是 users 则会匹配 views/users.ejs，
+//             第二个参数是传给模板的数据，这里传入 name，则在 ejs 模板中可使用 name
+
+//   小提示：拆分模板组件通常有两个好处：
+
+//   模板可复用，减少重复代码
+//   主模板结构清晰
+
+// 4.中间件与 next 处理错误
+
+// 当一个中间件处理完，可以通过调用 next() 传递给下一个中间件，
+// 如果没有调用 next()，则请求不会往下传递
+//   const express = require('express')
+//   const app = express()
+
+//   app.use(function (req, res, next) {
+//     console.log('1')
+//     next(new Error('haha'))
+//   })
+
+//   app.use(function (req, res, next) {
+//     console.log('2')
+//     res.status(200).end()
+//   })
+
+//   //错误处理
+//   app.use(function (err, req, res, next) {
+//     console.error(err.stack)
+//     res.status(500).send('Something broke!')
+//   })
+
+//   app.listen(3000)
+
+// 5. Express + MongoDB 搭建一个博客
+
+// 	1.models: 存放操作数据库的文件
+// 	2.public: 存放静态文件，如样式、图片等
+// 	3.routes: 存放路由文件
+// 	4.views: 存放模板文件
+// 	5.index.js: 程序主文件
+// 	6.package.json: 存储项目名、描述、作者、依赖等等信息
+
+// 6.安装依赖模块
+
+// npm i config-lite connect-flash connect-mongo ejs express express-session marked moment mongolass objectid-to-timestamp sha1 winston express-winston --save
+// npm i https://github.com:utatti/express-formidable.git --save # 从 GitHub 安装 express-formidable 最新版，v1.0.0 有 bug
+
+// 	1.express: nodeJS 框架
+// 	2.express-session: session 中间件
+// 	3.connect-mongo: 将 session 存储于 mongodb，结合 express-session 使用
+// 	4.connect-flash: 页面通知的中间件，基于 session 实现
+// 	5.ejs: 模板
+// 	6.express-formidable: 接收表单及文件上传的中间件
+// 	7.config-lite: 读取配置文件
+// 	8.marked: markdown 解析
+// 	9.moment: 时间格式化
+// 	10.mongolass: mongodb 驱动
+// 	11.objectid-to-timestamp: 根据 ObjectId 生成时间戳
+// 	12.sha1: sha1 加密，用于密码加密
+// 	13.winston: 日志
+//   14.express-winston: express 的 winston 日志中间件
+
+// 	全局安装 eslint：npm i eslint -g
+// 	运行：eslint --init
+
+//   初始化 eslint 配置，依次选择：
+
+//   -> Use a popular style guide
+//   -> Standard
+//   -> JSON
+
+// 7.EditorConfig 是一个保持缩进风格的一致的插件工具
+
+// 新建.editorconfig 文件：
+//   # editorconfig.org
+//   root = true
+
+//   [*]
+//   indent_style = space
+//   indent_size = 2
+//   end_of_line = lf
+//   charset = utf-8
+//   trim_trailing_whitespace = true
+//   insert_final_newline = true
+//   tab_width = 2
+
+//   [*.md]
+//   trim_trailing_whitespace = false
+
+//   [Makefile]
+//   indent_style = tab
+
+//   这里我们使用 2 个空格缩进，tab 长度也是 2 个空格。
+//   trim_trailing_whitespace 用来删除每一行最后多余的空格，
+//   insert_final_newline 用来在代码最后插入一个空的换行。
+
+// 8.config-lite 读取配置文件的模块
+
+//   如果程序以 NODE_ENV=test node app 启动，
+//   则 config-lite 会依次降级查找
+//   config/test.js、config/test.json、config/test.node、config/test.yml、config/test.yaml
+//   并合并 default 配置;
+//  如果程序以 NODE_ENV=production node app 启动，则 config-lite 会依次降级查找
+//   config/production.js、config/production.json、config/production.node、config/production.yml、config/production.yaml
+//   并合并 default 配置。
+
+// 9.功能与路由设计
+
+//   注册
+//     注册页：GET /signup
+//     注册（包含上传头像）：POST /signup
+//   登录
+//     登录页：GET /signin
+//     登录：POST /signin
+//     登出：GET /signout
+//   查看文章
+//     主页：GET /posts
+//     个人主页：GET /posts?author=xxx
+//     查看一篇文章（包含留言）：GET /posts/:postId
+//   发表文章
+//     发表文章页：GET /posts/create
+//     发表文章：POST /posts/create
+//     修改文章
+//     修改文章页：GET /posts/:postId/edit
+//     修改文章：POST /posts/:postId/edit
+//     删除文章：GET /posts/:postId/remove
+//   留言
+//     创建留言：POST /comments
+//     删除留言：GET /comments/:commentId/remove
+
+// 10.会话
+
+// cookie 与 session 的区别
+
+//   cookie 存储在浏览器（有大小限制），session 存储在服务端（没有大小限制）
+//   通常 session 的实现是基于 cookie 的，session id 存储于 cookie 中
+//   session 更安全，cookie 可以直接在浏览器查看甚至编辑
+
+//   引入 express-session 中间件实现对会话的支持：
+//   app.use(session(options))
+
+//   session 中间件会在 req 上添加 session 对象，
+//   即 req.session 初始值为 {}，当我们登录后设置 req.session.user = 用户信息，
+//   返回浏览器的头信息中会带上 set-cookie 将 session id 写到浏览器 cookie 中，
+//   那么该用户下次请求时，通过带上来的 cookie 中的 session id 我们就可以查找到该用户，
+//   并将用户信息保存到 req.session.user。
+
+// 11.页面通知
+
+// express-session: 会话（session）支持中间件
+// connect-mongo: 将 session 存储于 mongodb，需结合 express-session
+// connect-flash: 基于 session 实现的用于通知功能的中间件，需结合 express-session 使用
+
+// 12.权限控制
+
+//   checkLogin: 当用户信息（req.session.user）不存在，即认为用户没有登录，则跳转到登录页，
+//   同时显示 未登录 的通知，用于需要用户登录才能操作的页面。
+
+//   checkNotLogin: 当用户信息（req.session.user）存在，即认为用户已经登录，则跳转到之前的页面
+//   ，同时显示 已登录 的通知，如已登录用户就禁止访问登录、注册页面。
+
+
+// 13.app.locals 和 res.locals  #express 中两个对象用于模板的渲染
+
+//   app.locals 上通常挂载常量信息（如博客名、描述、作者这种不会变的信息）
+//   res.locals 上通常挂载变量信息，即每次请求可能的值都不一样（如请求者信息，res.locals.user = req.session.user）。
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
